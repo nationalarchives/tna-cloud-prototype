@@ -9,3 +9,7 @@
  * License: GPL2
  */
 
+/* Included functions */
+include 'functions.php';
+
+add_action( 'publish_page', 'render_page_as_html' );
