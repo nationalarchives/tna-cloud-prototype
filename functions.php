@@ -12,10 +12,19 @@ function notice_function() {
 	<?php
 }
 
+function getRenderedHTML($path)
+{
+	$content=file_get_contents($path);
+
+	return $content;
+}
+
 function render_page_as_html( $ID, $post ) {
 
 	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$permalink = get_permalink( $ID );
+
+	$html = getRenderedHTML($permalink);
 
 	$path_dir = str_replace( $protocol.$_SERVER['HTTP_HOST'].'/', '', rtrim($permalink, '/') );
 
@@ -55,7 +64,7 @@ function render_page_as_html( $ID, $post ) {
 		/* do our file manipulations below */
 		$wp_filesystem->put_contents(
 			$directory.'index.html',
-			$directory,
+			$html,
 			FS_CHMOD_FILE
 		);
 	}
@@ -64,52 +73,5 @@ function render_page_as_html( $ID, $post ) {
 		/* don't have direct write access. Prompt user with our notice */
 		add_action('admin_notices', 'notice_function');
 	}
-
-
-
-
-
-	/*
-	 *
-	 * $url = wp_nonce_url('themes.php?page=example','example-theme-options');
-	if (false === ($creds = request_filesystem_credentials($url, '', false, false, null) ) ) {
-		return; // stop processing here
-	}
-
-	wp_mkdir_p($directory);
-
-	if ( wp_mkdir_p( $directory ) )
-	{
-		echo "Folder $directory successfully created";
-	}
-	else
-	{
-		new WP_Error;
-	}
-
-	if ( file_exists('/wp-content/uploads/html/'.$path_dir) ) {
-		echo "The file $path_dir exists ";
-	} else {
-		echo "The file $path_dir does not exist ";
-	}
-
-	$url = wp_nonce_url('post.php?post='.$ID, 'example-theme-options');
-	if (false === ($creds = request_filesystem_credentials($url, '', false, false, null) ) ) {
-		return '!!!'; // stop processing here
-	}
-
-	if ( ! WP_Filesystem($creds) ) {
-		request_filesystem_credentials($url, '', true, false, null);
-		return '!!!';
-	}
-
-	global $wp_filesystem;
-	$wp_filesystem->put_contents(
-		'/tmp/example.txt',
-		$directory,
-		FS_CHMOD_FILE // predefined mode settings for WP files
-	);
-	*/
-
-	// print_r($path_parts);
+	
 }
