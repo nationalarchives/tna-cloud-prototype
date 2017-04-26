@@ -73,5 +73,5 @@ function render_page_as_html( $ID, $post ) {
 		/* don't have direct write access. Prompt user with our notice */
 		add_action('admin_notices', 'notice_function');
 	}
-	
+
 }
