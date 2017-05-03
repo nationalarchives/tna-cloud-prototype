@@ -2,6 +2,8 @@
 
 The National Archives Cloud plugin for WordPress
 
+Renders a static HTML version of the WordPress Multisite
+
 ## 1.0 Development setup: WordPress nested Multisite
 
 ### 1.1 Create host for WordPress in MAMP Pro
