@@ -12,9 +12,11 @@ function notice_function() {
 	<?php
 }
 
-function getRenderedHTML($path)
+function getRenderedHTML($path, $pre_path)
 {
-	$content=file_get_contents($path);
+	$content = file_get_contents($path);
+
+	$content = str_replace( site_url(), '/wp-content/uploads/html/'.$pre_path, $content );
 
 	return $content;
 }
@@ -24,11 +26,19 @@ function render_page_as_html( $ID, $post ) {
 	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$permalink = get_permalink( $ID );
 
-	$html = getRenderedHTML($permalink);
+	if ( $permalink !== $protocol.$_SERVER['HTTP_HOST'].'/' ) {
+		$path_dir = str_replace( $protocol.$_SERVER['HTTP_HOST'].'/', '', rtrim($permalink, '/') );
+	} else {
+		$path_dir = '';
+	}
 
-	$path_dir = str_replace( $protocol.$_SERVER['HTTP_HOST'].'/', '', rtrim($permalink, '/') );
+	$slug = get_post_field( 'post_name', get_post() );
+
+	$path_dir_noslug = rtrim(str_replace( $slug, '', $path_dir), "/");
 
 	$path_parts = explode('/', $path_dir);
+
+	$html = getRenderedHTML($permalink, $path_dir_noslug);
 
 	$directory = ABSPATH . 'wp-content/uploads/html/' . $path_dir . '/';
 

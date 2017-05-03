@@ -12,4 +12,6 @@
 /* Included functions */
 include 'functions.php';
 
+remove_filter('template_redirect', 'redirect_canonical');
+
 add_action( 'publish_page', 'render_page_as_html' );
