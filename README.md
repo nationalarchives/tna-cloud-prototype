@@ -2,7 +2,7 @@
 
 The National Archives Cloud plugin for WordPress
 
-## 1.0 WordPress nested Multisite WordPress setup on a dev machine
+## 1.0 Development setup: WordPress nested Multisite WordPress
 
 ### 1.1 Create host for WordPress in MAMP Pro
 
@@ -15,3 +15,20 @@ At this point we need make a decision on ports. WordPress Multisite will not wor
 Or you can change network.php after installing WordPress. Not recommended. Once installed, find the network.php inside wp-admin and change array( ':80', ':443' ) to array( ':80', ':443', ':8888' ).
 
 Under the ‘Hosts‘ tab, with the new server selected, click ‘Extras‘ and install WordPress, providing a name of the blog and your email address as the email address.
+
+### 1.3 Prepare WordPress
+
+Login to the new WordPress installation. Under ‘Settings->Permalinks‘, select a Pretty Permalink.
+
+Deactivate all active plugins.
+
+### 1.4 Allow Multisite
+
+Open wp-config.php and add this line above where it says /* That's all, stop editing! Happy blogging. */.
+
+```
+/* Multisite */
+define( 'WP_ALLOW_MULTISITE', true );
+```
+
+Refresh your browser.
