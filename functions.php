@@ -30,7 +30,7 @@ function notice_function() {
 	<?php
 }
 
-function getRenderedHTML($page_url, $path)
+function get_rendered_html($page_url, $path)
 {
 	$content = file_get_contents($page_url);
 
@@ -64,7 +64,7 @@ function render_page_as_html( $ID, $post ) {
 
 	$path_parts = explode('/', rtrim($path_dir, '/'));
 
-	$html = getRenderedHTML($permalink, $path_dir_noslug);
+	$html = get_rendered_html($permalink, $path_dir_noslug);
 
 	$directory = ABSPATH . HTML_DIR . $path_dir;
 
@@ -92,9 +92,7 @@ function render_page_as_html( $ID, $post ) {
 			$html,
 			FS_CHMOD_FILE
 		);
-	}
-	else
-	{
+	} else {
 		/* don't have direct write access. Prompt user with our notice */
 		add_action('admin_notices', 'notice_function');
 	}
