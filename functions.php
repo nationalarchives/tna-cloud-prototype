@@ -4,7 +4,7 @@
  *
  */
 
-define( 'HTML_DIR', 'wp-content/uploads/html/' );
+define( 'HTML_DIR', 'html/' );
 
 
 function tna_cloud_init() {
@@ -30,15 +30,11 @@ function notice_function() {
 	<?php
 }
 
-function get_rendered_html($page_url, $path)
+function get_rendered_html($page_url)
 {
 	$content = file_get_contents($page_url);
 
-	if ($path) {
-		$content = str_replace( site_url(), '/'.HTML_DIR.$path, $content );
-	} else {
-		$content = str_replace( site_url(), '/'.rtrim(HTML_DIR,'/'), $content );
-	}
+	$content = str_replace( network_site_url(), '/'.HTML_DIR, $content );
 
 	return $content;
 }
@@ -51,20 +47,12 @@ function render_page_as_html( $ID ) {
 	if ( $permalink !== $protocol.$_SERVER['HTTP_HOST'].'/' ) {
 		$path_dir = str_replace( $protocol.$_SERVER['HTTP_HOST'].'/', '', $permalink );
 	} else {
-		$path_dir = '';
-	}
-
-	$slug = get_post_field( 'post_name', get_post() );
-
-	if ($path_dir) {
-		$path_dir_noslug = rtrim(str_replace( $slug, '', $path_dir), '/');
-	} else {
-		$path_dir_noslug = null;
+		$path_dir = null;
 	}
 
 	$path_parts = explode('/', rtrim($path_dir, '/'));
 
-	$html = get_rendered_html($permalink, $path_dir_noslug);
+	$html = get_rendered_html($permalink);
 
 	$directory = ABSPATH . HTML_DIR . $path_dir;
 
