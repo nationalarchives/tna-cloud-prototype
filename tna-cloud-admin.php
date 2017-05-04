@@ -20,8 +20,8 @@ function tna_cloud_admin_page() {
 			<?php
 			wp_nonce_field('render_button_clicked');
 			if (isset($_POST['submit-tna-cloud']) && check_admin_referer('render_button_clicked')) {
-				
-				echo '<div class="notice"><p>Site rendered</p></div>';
+
+				get_all_pages_and_render();
 			}
 			?>
 			<p class="submit">
@@ -30,4 +30,18 @@ function tna_cloud_admin_page() {
 		</form>
 	</div>
 	<?php
+}
+
+function get_all_pages_and_render() {
+	$pages = get_pages();
+	echo '<ul>';
+	foreach ( $pages as $page ) {
+		render_page_as_html($page->ID);
+		$option = '<li>';
+		$option .= $page->post_title;
+		$option .= '</li>';
+		echo $option;
+	}
+	echo '</ul>';
+	echo '<div class="notice"><p>Site rendered</p></div>';
 }

@@ -43,7 +43,7 @@ function get_rendered_html($page_url, $path)
 	return $content;
 }
 
-function render_page_as_html( $ID, $post ) {
+function render_page_as_html( $ID ) {
 
 	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$permalink = get_permalink( $ID );
