@@ -30,8 +30,7 @@ function notice_function() {
 	<?php
 }
 
-function get_rendered_html($page_url)
-{
+function get_rendered_html($page_url) {
 	$content = file_get_contents($page_url);
 
 	$content = str_replace( network_site_url(), '/'.HTML_DIR, $content );
@@ -41,11 +40,10 @@ function get_rendered_html($page_url)
 
 function render_page_as_html( $ID ) {
 
-	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$permalink = get_permalink( $ID );
 
-	if ( $permalink !== $protocol.$_SERVER['HTTP_HOST'].'/' ) {
-		$path_dir = str_replace( $protocol.$_SERVER['HTTP_HOST'].'/', '', $permalink );
+	if ( $permalink !== network_site_url() ) {
+		$path_dir = str_replace( network_site_url(), '', $permalink );
 	} else {
 		$path_dir = null;
 	}
