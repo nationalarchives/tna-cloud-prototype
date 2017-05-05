@@ -10,6 +10,7 @@
  */
 
 /* Included functions */
+include 'tna-cloud-admin.php';
 include 'functions.php';
 
 remove_filter('template_redirect', 'redirect_canonical');

@@ -2,6 +2,8 @@
 
 The National Archives Cloud plugin for WordPress
 
+Renders a static HTML version of the WordPress Multisite
+
 ## 1.0 Development setup: WordPress nested Multisite
 
 ### 1.1 Create host for WordPress in MAMP Pro
@@ -135,7 +137,15 @@ RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
 RewriteRule . index.php [L]
 ```
 
-### 1.10 And you’re done
+### 1.10 Edit wp-config.php for WP Filesystem API
+
+Open wp-config.php and add this line, if it doesn't exist or experiencing update problems, above where it says ```/* That's all, stop editing! Happy blogging. */```.
+
+```
+define('FS_METHOD','direct');
+```
+
+### 1.11 And you’re done
 
 Have a go creating nested sites.
 

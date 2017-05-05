@@ -4,6 +4,24 @@
  *
  */
 
+define( 'HTML_DIR', 'html/' );
+
+
+function tna_cloud_init() {
+
+	$creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+
+	if ( ! WP_Filesystem($creds) ) {
+		return false;
+	}
+
+	global $wp_filesystem;
+
+	if( !$wp_filesystem->is_dir(ABSPATH . HTML_DIR) ) {
+		$wp_filesystem->mkdir(ABSPATH . HTML_DIR);
+	}
+}
+
 function notice_function() {
 	?>
 	<div class="notice">
@@ -12,47 +30,34 @@ function notice_function() {
 	<?php
 }
 
-function getRenderedHTML($path, $pre_path)
-{
-	$content = file_get_contents($path);
+function get_rendered_html($page_url) {
+	$content = file_get_contents($page_url);
 
-	$content = str_replace( site_url(), '/wp-content/uploads/html/'.$pre_path, $content );
+	$content = str_replace( network_site_url(), '/'.HTML_DIR, $content );
 
 	return $content;
 }
 
-function render_page_as_html( $ID, $post ) {
+function render_page_as_html( $ID ) {
 
-	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$permalink = get_permalink( $ID );
 
-	if ( $permalink !== $protocol.$_SERVER['HTTP_HOST'].'/' ) {
-		$path_dir = str_replace( $protocol.$_SERVER['HTTP_HOST'].'/', '', rtrim($permalink, '/') );
+	if ( $permalink !== network_site_url() ) {
+		$path_dir = str_replace( network_site_url(), '', $permalink );
 	} else {
-		$path_dir = '';
+		$path_dir = null;
 	}
 
-	$slug = get_post_field( 'post_name', get_post() );
+	$path_parts = explode('/', rtrim($path_dir, '/'));
 
-	$path_dir_noslug = rtrim(str_replace( $slug, '', $path_dir), "/");
+	$html = get_rendered_html($permalink);
 
-	$path_parts = explode('/', $path_dir);
-
-	$html = getRenderedHTML($permalink, $path_dir_noslug);
-
-	$directory = ABSPATH . 'wp-content/uploads/html/' . $path_dir . '/';
+	$directory = ABSPATH . HTML_DIR . $path_dir;
 
 	$access_type = get_filesystem_method();
-	if($access_type === 'direct')
-	{
-		/* you can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
-		$creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
+	if($access_type === 'direct') {
 
-		/* initialize the API */
-		if ( ! WP_Filesystem($creds) ) {
-			/* any problems and we exit */
-			return false;
-		}
+		tna_cloud_init();
 
 		global $wp_filesystem;
 
@@ -60,26 +65,20 @@ function render_page_as_html( $ID, $post ) {
 
 		$pre_path = '';
 
-		$wp_filesystem->mkdir(ABSPATH . 'wp-content/uploads/html/');
-
-
 		for ( $i=0 ; $i<=$counter ; $i++ ) {
 
-			$wp_filesystem->mkdir(ABSPATH . 'wp-content/uploads/html/' . $pre_path . $path_parts[$i]);
+			$wp_filesystem->mkdir(ABSPATH . HTML_DIR . $pre_path . $path_parts[$i]);
 
 			$pre_path .= $path_parts[$i] . '/';
 
 		}
 
-		/* do our file manipulations below */
 		$wp_filesystem->put_contents(
 			$directory.'index.html',
 			$html,
 			FS_CHMOD_FILE
 		);
-	}
-	else
-	{
+	} else {
 		/* don't have direct write access. Prompt user with our notice */
 		add_action('admin_notices', 'notice_function');
 	}
