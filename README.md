@@ -137,7 +137,15 @@ RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
 RewriteRule . index.php [L]
 ```
 
-### 1.10 And you’re done
+### 1.10 Edit wp-config.php for WP Filesystem API
+
+Open wp-config.php and add this line, if it doesn't exist or experiencing update problems, above where it says ```/* That's all, stop editing! Happy blogging. */```.
+
+```
+define('FS_METHOD','direct');
+```
+
+### 1.11 And you’re done
 
 Have a go creating nested sites.
 
