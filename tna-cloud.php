@@ -9,6 +9,9 @@
  * License: GPL2
  */
 
+/* Global */
+define( 'HTML_DIR', 'html/' );
+
 /* Included functions */
 include 'tna-cloud-admin.php';
 include 'functions.php';

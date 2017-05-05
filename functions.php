@@ -4,9 +4,6 @@
  *
  */
 
-define( 'HTML_DIR', 'html/' );
-
-
 function tna_cloud_init() {
 
 	$creds = request_filesystem_credentials(site_url() . '/wp-admin/', '', false, false, array());
