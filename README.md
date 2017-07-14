@@ -63,6 +63,9 @@ Open ```sunrise.php``` and add the follow code. Courtesy of Paul Underwood.
 ```
 <?php
 if( defined( 'DOMAIN_CURRENT_SITE' ) && defined( 'PATH_CURRENT_SITE' ) ) {
+    if (!isset($current_site)) { 
+        $current_site = new stdClass();
+    }
     $current_site->id = (defined( 'SITE_ID_CURRENT_SITE' ) ? constant('SITE_ID_CURRENT_SITE') : 1);
     $current_site->domain = $domain = DOMAIN_CURRENT_SITE;
     $current_site->path  = $path = PATH_CURRENT_SITE;
@@ -76,6 +79,7 @@ if( defined( 'DOMAIN_CURRENT_SITE' ) && defined( 'PATH_CURRENT_SITE' ) ) {
     $blogsearch = '';
 
     if( count( $patharray )){
+        $pathsearch = '';
         foreach( $patharray as $pathpart ){
             $pathsearch .= '/'. $pathpart;
             $blogsearch .= $wpdb->prepare(" OR (domain = %s AND path = %s) ", $domain, $pathsearch .'/' );
