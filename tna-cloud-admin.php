@@ -18,8 +18,8 @@ function tna_cloud_admin_page() {
 		<h1>TNA Cloud</h1>
 		<form method="post" action="admin.php?page=tna-cloud-admin-page" novalidate="novalidate">
 			<?php
-			wp_nonce_field('render_button_clicked');
-			if (isset($_POST['submit-tna-cloud']) && check_admin_referer('render_button_clicked')) {
+			wp_nonce_field('tna-cloud-admin-settings');
+			if (isset($_POST['submit-tna-cloud']) && check_admin_referer('tna-cloud-admin-settings')) {
 
 				get_all_pages_and_render();
 			}
