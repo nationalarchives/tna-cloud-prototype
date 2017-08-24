@@ -22,7 +22,14 @@ function get_rendered_html($page_url) {
 
 	$request = new WP_Http;
 	$result = $request->request( $page_url );
-	$content = $result['body'];
+
+    if ( is_wp_error( $result ) ) {
+        $content = false;
+    } elseif ( wp_remote_retrieve_response_code( $result ) == '404' ) {
+        $content = false;
+    } else {
+        $content = $result['body'];
+    }
 
 	// $content = str_replace( '<a href="'.network_site_url(), '<a href="/wp-content/uploads/static/', $content );
 
